@@ -11,11 +11,8 @@ class FileStorage:
     def all(self, cls=None):
         """Returns list of objects of one type class"""
         if cls:
-            obj_dict = {}
-            for key, value in self.__objects.items():
-                if cls == value.__class__:
-                    obj_dict[key] = value
-            return obj_dict
+            return {key: obj for (key, obj)
+                    in self.__objects.items() if isinstance(obj, cls)}
         return self.__objects
 
     def new(self, obj):
