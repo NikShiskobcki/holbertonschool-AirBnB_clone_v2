@@ -130,6 +130,15 @@ class HBNBCommand(cmd.Cmd):
                 key_value = argument.split('=')
                 key = key_value[0]
                 value = key_value[1]
+                value = value.replace('_', ' ')
+                try:
+                    value = float(value)
+                except Exception:
+                    pass
+                try:
+                    value = int(value)
+                except Exception:
+                    pass
                 new_instance.__dict__[key] = value
         except Exception:
             pass
