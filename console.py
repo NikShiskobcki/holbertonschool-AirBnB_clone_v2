@@ -125,8 +125,8 @@ class HBNBCommand(cmd.Cmd):
             return
         new_instance = HBNBCommand.classes[tok[0]]()
         del tok[0]
-        try:
-            for argument in tok:
+        for argument in tok:
+            try:
                 key_value = argument.split('=')
                 key = key_value[0]
                 value = key_value[1]
@@ -140,8 +140,8 @@ class HBNBCommand(cmd.Cmd):
                 except Exception:
                     pass
                 new_instance.__dict__[key] = value
-        except Exception:
-            pass
+            except Exception:
+                pass
         storage.save()
         print(new_instance.id)
         storage.save()
