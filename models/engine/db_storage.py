@@ -13,6 +13,10 @@ from models.place import Place
 from models.review import Review
 
 
+classes = {"City": City, "State": State, "User": User, "Place": Place,
+        "Review": Review, "Amenity": Amenity}
+
+
 class DBStorage():
     """engine dbstorage"""
     __engine = None
@@ -30,22 +34,15 @@ class DBStorage():
             Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
-        classes = {"City": City, "State": State, "User": User, "Place": Place,
-                   "Review": Review, "Amenity": Amenity}
-        if cls:
-            objs = self.__session.query(self.classes[cls])
-        else:
-            objs = self.__session.query(State).all()
-            objs += self.__session.query(City).all()
-            objs += self.__session.query(User).all()
-            objs += self.__session.query(Place).all()
-            objs += self.__session.query(Amenity).all()
-            objs += self.__session.query(Review).all()
-        dict = {}
-        for obj in objs:
-            key = '{}.{}'.format(type(obj).__name__, obj.id)
-            dict[key] = obj
-        return dict
+        """all def"""
+        auxDict = {}
+        for x in classes:
+            if cls is None or cls == classes[x]:
+                objs = self.__session.query(classes[x]).all()
+                for obj in objs:
+                    key = type(obj).__name__ + '.' + obj.id
+                    auxDict[key] = obj
+        return auxDict
 
     def new(self, obj):
         """adds object to current db session"""
@@ -63,7 +60,7 @@ class DBStorage():
     def reload(self):
         """creates all tables of db"""
         Base.metadata.create_all(self.__engine)
-        self.__session = sessionmaker(bind=self.__engine,
+        nSession = sessionmaker(bind=self.__engine,
                                     expire_on_commit=False)
-        Session = scoped_session(self.__session)
+        Session = scoped_session(nSession)
         self.__session = Session
