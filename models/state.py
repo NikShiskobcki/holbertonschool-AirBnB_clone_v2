@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 from models.base_model import BaseModel, Base
-#from models import storage
 from sqlalchemy import Column, Integer, String
 from os import getenv, environ
+from models.city import City
+from sqlalchemy.orm import relationship
 
 
 class State(BaseModel, Base):
@@ -18,11 +19,12 @@ class State(BaseModel, Base):
     elif (type_storage == 'file'):
         @property
         def cities(self):
+            from models import storage
             all_cities = storage.all(City)
             states_id = self.id
 
             new_list = []
-            for city in all_city:
+            for city in all_cities:
                 if (city.id == states_id):
                     new_list.append(city)
             return new_list
