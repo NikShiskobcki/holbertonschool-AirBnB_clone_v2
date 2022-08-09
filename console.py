@@ -115,31 +115,36 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """ Create an object of any class"""
-        args = []
-        try:
-            if not arg:
-                raise SyntaxError()
-            args = arg.split(" ")
-            #saves in params from classname to the last parameter
-            params = args[1:]
-            #eval parses the expression
-            objec = eval("{}()".format(args[0]))
-            for param in params:
-                #parameter syntax is <key name>=<value>
-                paramSyntax = param.split("=")
-                if len(paramSyntax) == 2:
-                    #checks for type to replace special chars
-                    if type(paramSyntax[1]) in [str, int, float]:
-                        paramSyntax[1] = paramSyntax[1].replace('"', '')
-                        paramSyntax[1] = paramSyntax[1].replace('_', ' ')
-                        setattr(objec, paramSyntax[0], paramSyntax[1])
-            objec.save()
-            print("{}".format(objec.id))
+        args = split(arg, posix=False)
 
-        except SyntaxError:
+        if args == []:
             print("** class name missing **")
-        except NameError:
+            return
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
+            return
+
+        new_instance = HBNBCommand.classes[args[0]]()
+        for param in args[1:]:
+            paramAux = param
+            paramAux = paramAux.split("=")
+            key = str(paramAux[0])
+            value = paramAux[1]
+            if (value[0] == '"') and (value[-1] == '"'):
+                value = value.replace('"', "")
+                if "_" in value:
+                    value = value.replace("_", " ")
+            else:
+                try:
+                    value = int(value)
+                except Exception:
+                    try:
+                        value = float(value)
+                    except Exception:
+                        continue
+            setattr(new_instance, key, value)
+            new_instance.save()
+            print(new_instance.id)
         
 
     def help_create(self):
