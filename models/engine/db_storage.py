@@ -4,7 +4,7 @@ Task 6
 """
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from os import getenv
 from models.base_model import Base
 from models.amenity import Amenity
@@ -25,36 +25,51 @@ class DBStorage:
         Init
         """
 
-        user = getenv(HBNB_MYSQL_USER)
-        passw = getenv(HBNB_MYSQL_PWD)
-        host = getenv(HBNB_MYSQL_HOST)
-        database = getenv(HBNB_MYSQL_DB)
+        user = getenv('HBNB_MYSQL_USER')
+        passw = getenv('HBNB_MYSQL_PWD')
+        host = getenv('HBNB_MYSQL_HOST')
+        database = getenv('HBNB_MYSQL_DB')
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
             user, passw, host, database), pool_pre_ping=True)
 
-        Session = sessionmaker(bind=engine)
-        self.__session = Session()
+        #Session = sessionmaker(bind=self.__engine)
+        #self.__session = Session()
 
-        env = getenv(HBNB_ENV)
+        env = getenv('HBNB_ENV')
         if (env == 'test'):
-            Base.metadata.drop_all(self.engine)
+            Base.metadata.drop_all(self.__engine)
     
     def all(self, cls=None):
         """
         All
         """
-
+        classes = {
+               'User': User, 'Place': Place,
+               'State': State, 'City': City, 'Amenity': Amenity,
+               'Review': Review
+              }
+        """
         if (cls is None):    
             all_cls = self.__session.query(User, State, City, Amenity, Place, Review).all()
         else:
-            all_cls = self.__session.query(cls).all()
-
+            all_cls = self.__session.query(classes[cls]).all()
+        print(all_cls)
         new_dict = {}
         for obj in all_cls:
             key = obj.__clas__.__name__ + "." + obj.id
             new_dict[key] = obj
+        print(new_dict)
         return new_dict
+        """
+        newDict = {}
+        for clss in classes:
+            if cls is None or cls == classes[clss]:
+                objects = self.__session.query(classes[clss]).all()
+                for obj in objects:
+                    key = type(obj).__name__ + '.' + obj.id
+                    newDict[key] = obj
+        return newDict
         
     def new(self, obj):
         """
@@ -79,5 +94,8 @@ class DBStorage:
             self.__sesion.delete(obj)
 
     def reload(self):
-        
-    
+        """reload"""
+        Base.metadata.create_all(self.__engine)
+        create_session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(create_session)
+        self.__session = Session()

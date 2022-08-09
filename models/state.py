@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 from models.base_model import BaseModel, Base
-from models import storage
-from sqlalchemy import Column, Integer, String, ForeingKey
-from os import getenv
+#from models import storage
+from sqlalchemy import Column, Integer, String
+from os import getenv, environ
 
 
 class State(BaseModel, Base):
@@ -12,10 +12,10 @@ class State(BaseModel, Base):
     '''
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    type_storage = getenv(HBN_TYPE_STORAGE)
-    if (type_storage == db):
+    type_storage = getenv('HBN_TYPE_STORAGE')
+    if (type_storage == 'db'):
         cities = relationship("City", backref="state", cascade="all, delete-orphan")
-    elif (type_storage == file):
+    elif (type_storage == 'file'):
         @property
         def cities(self):
             all_cities = storage.all(City)

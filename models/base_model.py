@@ -31,7 +31,7 @@ class BaseModel:
                     elif elemnt == "updated_at":
                         kwargs[elemnt] = datetime.fromisoformat(kwargs[elemnt])
                     setattr(self, elemnt, kwargs[elemnt])
-            #self.__dict__.update(kwargs)
+        
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -42,8 +42,8 @@ class BaseModel:
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
-        storage.save()
         storage.new(self)
+        storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
