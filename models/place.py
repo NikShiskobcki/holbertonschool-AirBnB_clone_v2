@@ -4,10 +4,17 @@ Place Module for HBNB project
 """
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.review import Review
 from os import getenv
+
+place_amenity = Table("place_amenity", Base.metadata,
+                      Column("place_id", String(60), ForeignKey("places.id"),
+                             primary_key=True, nullable=False),
+                      Column("amenity_id", String(60),
+                             ForeignKey("amenities.id"),
+                             primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -27,9 +34,13 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     type_storage = getenv('HBN_TYPE_STORAGE')
+    amenity_ids = []
+
     if (type_storage == 'db'):
         reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False, backref="place")
     elif (type_storage == 'file'):
         @property
         def reviews(self):
@@ -42,3 +53,19 @@ class Place(BaseModel, Base):
                 if (review.id == place_id):
                     new_list.append(review)
             return new_list
+
+        @property
+        def amenities(self):
+            from models import storage
+            all_amenities = storage.all(Amenity)
+
+            new_list = []
+            for amenity in all_amenities:
+                if (amenity.place_id == self.id):
+                    new_list.append(amenity)
+            return new_list
+
+        @amenities.setter
+        def amenities(self, obj=None):
+            if (obj == Amenity):
+                self.amenity_ids.append(obj.id)
