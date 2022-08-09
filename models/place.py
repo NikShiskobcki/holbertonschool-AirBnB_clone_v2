@@ -33,24 +33,22 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    type_storage = getenv('HBN_TYPE_STORAGE')
     amenity_ids = []
 
-    if (type_storage == 'db'):
+    if (getenv('HBN_TYPE_STORAGE') == 'db'):
         reviews = relationship("Review", backref="place",
                                cascade="all, delete-orphan")
         amenities = relationship("Amenity", secondary=place_amenity,
-                                 viewonly=False, backref="place")
-    elif (type_storage == 'file'):
+                                 viewonly=False, backref="places_amenities")
+    else:
         @property
         def reviews(self):
             from models import storage
             all_reviews = storage.all(Review)
-            place_id = self.id
 
             new_list = []
             for review in all_reviews:
-                if (review.id == place_id):
+                if (review.id == self.id):
                     new_list.append(review)
             return new_list
 

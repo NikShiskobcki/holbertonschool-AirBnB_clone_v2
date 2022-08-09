@@ -13,19 +13,18 @@ class State(BaseModel, Base):
     '''
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    type_storage = getenv('HBN_TYPE_STORAGE')
-    if (type_storage == 'db'):
+    
+    if (getenv('HBN_TYPE_STORAGE') == 'db'):
         cities = relationship("City", backref="state",
                               cascade="all, delete-orphan")
-    elif (type_storage == 'file'):
+    else:
         @property
         def cities(self):
             from models import storage
             all_cities = storage.all(City)
-            states_id = self.id
 
             new_list = []
             for city in all_cities:
-                if (city.id == states_id):
+                if (city.states_id == self.id):
                     new_list.append(city)
             return new_list
