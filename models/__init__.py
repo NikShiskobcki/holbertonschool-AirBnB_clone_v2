@@ -9,6 +9,6 @@ env = getenv('HBNB_TYPE_STORAGE')
 if (env == 'db'):
     storage = DBStorage()
     storage.reload()
-elif (env == 'file'):
+else:
     storage = FileStorage()
     storage.reload()
