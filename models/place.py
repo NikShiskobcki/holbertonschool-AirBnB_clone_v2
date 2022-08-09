@@ -6,6 +6,8 @@ Place Module for HBNB project
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
+from models.review import Review
+from os import getenv
 
 
 class Place(BaseModel, Base):
@@ -24,3 +26,19 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    type_storage = getenv('HBN_TYPE_STORAGE')
+    if (type_storage == 'db'):
+        reviews = relationship("Review", backref="place",
+                               cascade="all, delete-orphan")
+    elif (type_storage == 'file'):
+        @property
+        def cities(self):
+            from models import storage
+            all_reviews = storage.all(Review)
+            place_id = self.id
+
+            new_list = []
+            for review in all_reviews:
+                if (review.id == place_id):
+                    new_list.append(review)
+            return new_list
