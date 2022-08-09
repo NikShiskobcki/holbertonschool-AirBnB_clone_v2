@@ -32,7 +32,7 @@ class Place(BaseModel, Base):
                                cascade="all, delete-orphan")
     elif (type_storage == 'file'):
         @property
-        def cities(self):
+        def reviews(self):
             from models import storage
             all_reviews = storage.all(Review)
             place_id = self.id
