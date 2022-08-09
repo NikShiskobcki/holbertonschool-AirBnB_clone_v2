@@ -16,7 +16,10 @@ from models.review import Review
 
 
 class DBStorage:
-    
+    """
+    DB Storage Class
+    """
+
     __engine = None
     __session = None
 
@@ -33,13 +36,10 @@ class DBStorage:
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
             user, passw, host, database), pool_pre_ping=True)
 
-        #Session = sessionmaker(bind=self.__engine)
-        #self.__session = Session()
-
         env = getenv('HBNB_ENV')
         if (env == 'test'):
             Base.metadata.drop_all(self.__engine)
-    
+
     def all(self, cls=None):
         """
         All
@@ -49,28 +49,15 @@ class DBStorage:
                'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
               }
-        """
-        if (cls is None):    
-            all_cls = self.__session.query(User, State, City, Amenity, Place, Review).all()
-        else:
-            all_cls = self.__session.query(classes[cls]).all()
-        print(all_cls)
         new_dict = {}
-        for obj in all_cls:
-            key = obj.__clas__.__name__ + "." + obj.id
-            new_dict[key] = obj
-        print(new_dict)
-        return new_dict
-        """
-        newDict = {}
         for clss in classes:
             if cls is None or cls == classes[clss]:
                 objects = self.__session.query(classes[clss]).all()
                 for obj in objects:
                     key = type(obj).__name__ + '.' + obj.id
-                    newDict[key] = obj
-        return newDict
-        
+                    new_dict[key] = obj
+        return new_dict
+
     def new(self, obj):
         """
         New
@@ -96,6 +83,7 @@ class DBStorage:
     def reload(self):
         """reload"""
         Base.metadata.create_all(self.__engine)
-        create_session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        create_session = sessionmaker(bind=self.__engine,
+                                      expire_on_commit=False)
         Session = scoped_session(create_session)
         self.__session = Session()

@@ -15,7 +15,8 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
     type_storage = getenv('HBN_TYPE_STORAGE')
     if (type_storage == 'db'):
-        cities = relationship("City", backref="state", cascade="all, delete-orphan")
+        cities = relationship("City", backref="state",
+                              cascade="all, delete-orphan")
     elif (type_storage == 'file'):
         @property
         def cities(self):

@@ -31,7 +31,6 @@ class BaseModel:
                     elif elemnt == "updated_at":
                         kwargs[elemnt] = datetime.fromisoformat(kwargs[elemnt])
                     setattr(self, elemnt, kwargs[elemnt])
-        
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -53,7 +52,7 @@ class BaseModel:
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        """TASK 6 remove the key _sa_instance_state from the dictionary returned by this method"""
+
         if ('_sa_instance_state' in dictionary):
             del dictionary['_sa_instance_state']
         return dictionary
@@ -62,4 +61,3 @@ class BaseModel:
         """Delete the current instance from the storage"""
         from models import storage
         storage.save()
-        
