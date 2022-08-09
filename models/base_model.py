@@ -60,4 +60,6 @@ class BaseModel:
 
     def delete(self):
         """Delete the current instance from the storage"""
-        sotrage.delete(self)
+        from models import storage
+        storage.save()
+        
