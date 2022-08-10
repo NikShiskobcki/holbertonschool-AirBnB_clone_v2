@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, ForeignKey, Table, Integer, Float
 from os import getenv
 
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = "places"
@@ -22,12 +23,8 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviews = relationship("Review", cascade="all, delete-orphan",
+       reviews = relationship("Review", cascade="all, delete-orphan",
                                 backref='place')
-        
-        amenities = relationship('Amenity', secondary=place_amenity,
-                                 viewonly=False)
-    
     else:
         @property
         def reviews(self):
