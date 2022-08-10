@@ -18,19 +18,17 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        if not kwargs:
-            from models import storage
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-        else:
-            for elemnt in kwargs:
-                if elemnt != "__class__":
-                    if elemnt == "created_at":
-                        kwargs[elemnt] = datetime.fromisoformat(kwargs[elemnt])
-                    elif elemnt == "updated_at":
-                        kwargs[elemnt] = datetime.fromisoformat(kwargs[elemnt])
-                    setattr(self, elemnt, kwargs[elemnt])
+        from models import storage
+        if kwargs is not None and len(kwargs) != 0:
+            for key, value in kwargs.items():
+                if key != '__class__':
+                    if key == "created_at" or key == "updated_at":
+                        value = datetime.fromisoformat(value)
+                    setattr(self, key, value)
+
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     def __str__(self):
         """Returns a string representation of the instance"""

@@ -63,7 +63,6 @@ class Place(BaseModel, Base):
                 if (amenity.place_id == self.id):
                     new_list.append(amenity)
             return new_list
-            
 
         @amenities.setter
         def amenities(self, obj=None):
