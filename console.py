@@ -143,8 +143,8 @@ class HBNBCommand(cmd.Cmd):
                     except Exception:
                         continue
             setattr(new_instance, key, value)
-            new_instance.save()
-            print(new_instance.id)
+        new_instance.save()
+        print(new_instance.id)
         
 
     def help_create(self):
