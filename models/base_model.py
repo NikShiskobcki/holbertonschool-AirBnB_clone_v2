@@ -55,11 +55,18 @@ class BaseModel:
 
     def to_dict(self):
         """Convert instance into dict format"""
-        auxDict = self.__dict__.copy()
-        auxDict['__class__'] = self.__class__.__name__
-        auxDict['updated_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        auxDict['created_at'] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        auxDict.pop('_sa_instance_state', None)
+        auxDict = {}
+        auxDict.update(self.__dict__)
+        try:
+            del auxDict['_sa_instance_state']
+        except Exception:
+            pass
+        auxDict.update({'__class__':
+            (str(type(self)).split('.')[-1]).split('\'')[0]})
+        auxDict['created_at'] = self.created_at.isoformat()
+        auxDict['updated_at'] = self.updated_at.isoformat()
+        if "_sa_instance_state" in auxDict:
+            del auxDict["_sa_instance_state"]
         return auxDict
 
     def delete(self):
