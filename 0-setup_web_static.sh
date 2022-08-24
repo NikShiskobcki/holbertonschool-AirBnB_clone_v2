@@ -26,6 +26,21 @@ sudo chown -R ubuntu /data/
 sudo chgrp -R ubuntu /data
 
 #update nginx configuration
-sed -i "/listen 80 default_server/a location /hbnb_static/ { alias /data/web_static/current/;}" /etc/nginx/sites-available/default
+printf %s "server {
+        listen 80;
+        listen [::]:80;
+        add_header X-Served-By  $HOSTNAME;
+        root   /var/www/html;
+        index  index.html;
+
+        location /hbnb_static {
+            alias  /data/web_static/current;
+            index  index.html;
+        }
+        location /redirect_me {
+                return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+        }
+        error_page 404 /5-design_a_beautiful_404_page.html;
+}" > /etc/nginx/sites-available/default
 
 sudo service nginx restart
