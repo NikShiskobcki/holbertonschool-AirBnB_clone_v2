@@ -17,6 +17,7 @@ def do_pack():
     except Exception:
         return None
 
+
 def do_deploy(archive_path):
     """function to distribute archive"""
     if exists(archive_path) is False:
@@ -36,6 +37,7 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
+
 
 def deploy():
     """deploys page"""
