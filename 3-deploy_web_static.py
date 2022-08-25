@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 """fabric script that distributes archive to web servers"""
 
-from fabric.api import put, run, env
-from os.path import exists
-env.hosts = ['web-01.n1k.tech', 'web-02.n1k.tech']
+from fabric.api import put, run, env, local
+from os.path import exists, isdir
+from datetime import datetime
+env.hosts = ['54.167.116.248', '50.17.74.91']
 
 
 def do_pack():
