@@ -3,7 +3,7 @@
 {% block body %}
     <H1>States</H1>
     <UL>
-        {% for states in storage %}
+        {% for state in states_l | sort(attribute="name") %}
             <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
         {% endfor %}
     </UL>
