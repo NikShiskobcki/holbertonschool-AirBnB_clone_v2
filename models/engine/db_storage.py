@@ -41,22 +41,26 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
+        """Performs a query on the current database session
+           cls is an object, not a string.
         """
-        All
-        """
-        classes = {
-               'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
-        new_dict = {}
-        for clss in classes:
-            if cls is None or cls == classes[clss]:
-                objects = self.__session.query(classes[clss]).all()
-                for obj in objects:
-                    key = type(obj).__name__ + '.' + obj.id
-                    new_dict[key] = obj
-        return new_dict
+        object_types = {'User': User, 'State': State, 'City': City,
+                        'Amenity': Amenity, 'Place': Place, 'Review': Review}
+        object_dict = {}
+
+        if cls is None:
+            for my_type in object_types.keys():
+                for obj in self.__session.query(object_types[my_type]).all():
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    object_dict[key] = obj
+        else:
+            if isinstance(cls, str):
+                cls = object_types[cls]
+            for obj in self.__session.query(cls).all():
+                key = obj.__class__.__name__ + '.' + obj.id
+                object_dict[key] = obj
+
+        return object_dict
 
     def new(self, obj):
         """
@@ -90,4 +94,4 @@ class DBStorage:
 
     def close(self):
         """task 7"""
-        self.__session.remove()
+        self.__session.close()
