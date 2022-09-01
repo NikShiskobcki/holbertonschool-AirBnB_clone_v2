@@ -29,8 +29,7 @@ def states_id(id):
     for state in states_l:
         if state.id == id:
             return render_template("9-states.html", state=state)
-        else:
-            return render_template("9-states.html", state=None)
+    return render_template("9-states.html", state=None)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
