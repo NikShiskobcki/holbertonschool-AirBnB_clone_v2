@@ -32,7 +32,7 @@ def states_id(id):
         if state.id == id:
             return render_template("9-states.html", state=state, flag=flag)
         else:
-            return render_template("9-states.html", state=1, flag=flag)
+            return render_template("9-states.html", state=None, flag=flag)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
