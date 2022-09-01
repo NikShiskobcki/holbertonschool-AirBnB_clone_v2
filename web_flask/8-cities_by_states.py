@@ -17,7 +17,7 @@ def cities_by_states():
     List states and storage
     """
     states_l = storage.all("State").values()
-    return render_template("7-states_list.html", states_l=states_l)
+    return render_template("8-cities_by_states.html", states_l=states_l)
 
 
 if __name__ == "__main__":
