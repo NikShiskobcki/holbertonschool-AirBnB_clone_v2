@@ -14,7 +14,7 @@ from models.review import Review
 
 
 classes = {"City": City, "State": State, "User": User, "Place": Place,
-        "Review": Review, "Amenity": Amenity}
+           "Review": Review, "Amenity": Amenity}
 
 
 class DBStorage():
@@ -25,11 +25,11 @@ class DBStorage():
     def __init__(self):
         """initiate"""
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                        .format(getenv('HBNB_MYSQL_USER'),
-                                                getenv('HBNB_MYSQL_PWD'),
-                                                getenv('HBNB_MYSQL_HOST'),
-                                                getenv('HBNB_MYSQL_DB')),
-                                        pool_pre_ping=True)
+                                      .format(getenv('HBNB_MYSQL_USER'),
+                                              getenv('HBNB_MYSQL_PWD'),
+                                              getenv('HBNB_MYSQL_HOST'),
+                                              getenv('HBNB_MYSQL_DB')),
+                                      pool_pre_ping=True)
         if getenv('HBNB_ENV') == "test":
             Base.metadata.drop_all(bind=self.__engine)
 
@@ -65,6 +65,6 @@ class DBStorage():
         """creates all tables of db"""
         Base.metadata.create_all(self.__engine)
         nSession = sessionmaker(bind=self.__engine,
-                                    expire_on_commit=False)
+                                expire_on_commit=False)
         Session = scoped_session(nSession)
         self.__session = Session
