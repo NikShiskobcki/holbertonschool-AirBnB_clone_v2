@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """task 1"""
 
-from flask import Flask, render_template 
+from flask import Flask, render_template
 app = Flask(__name__)
 
 
@@ -49,9 +49,10 @@ def odd_or_even(n):
     """display odd or even"""
     if (n % 2) == 0:
         return render_template("6-number_odd_or_even.html",
-                                var="{} is even". format(n))
+                               var="{} is even". format(n))
     return render_template("6-number_odd_or_even.html",
-                            var="{} is odd".format(n))
+                           var="{} is odd".format(n))
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
