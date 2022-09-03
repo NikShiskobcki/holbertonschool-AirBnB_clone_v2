@@ -33,6 +33,10 @@ class DBStorage():
         if getenv('HBNB_ENV') == "test":
             Base.metadata.drop_all(bind=self.__engine)
 
+    def close(self):
+        """close session"""
+        self.__session.close()
+
     def all(self, cls=None):
         """all def"""
         auxDict = {}
