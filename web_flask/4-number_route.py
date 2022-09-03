@@ -35,7 +35,7 @@ def python(text="is cool"):
 @app.route("/number/<int:n>", strict_slashes=False)
 def number(n):
     """display number"""
-    return "{ is a number}".format(n)
+    return "{} is a number".format(n)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
