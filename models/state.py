@@ -3,9 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-from os import getenv
 import models
-from models.city import City
 
 
 class State(BaseModel, Base):
@@ -18,9 +16,9 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """list cities"""
-        from models import storage
-        mcities = []
-        for city in storage.all(City).values():
-            if city.state_id == self.id:
-                mcities.append(models.storage.all(City)[city])
-        return mcities
+        lcities = []
+        cities = storage.all(City)
+        for city in cities:
+            if state_id == self.id:
+                lcities.append(city)
+        return lcities
