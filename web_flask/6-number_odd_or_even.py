@@ -49,9 +49,9 @@ def odd_or_even(n):
     """display odd or even"""
     if (n % 2) == 0:
         return render_template("6-number_odd_or_even.html",
-                               var="{} is even".format(n))
+                               n=n, var="even")
     return render_template("6-number_odd_or_even.html",
-                           var="{} is odd".format(n))
+                           n=n, var="odd")
 
 
 if __name__ == '__main__':
