@@ -4,12 +4,12 @@
         <TITLE>HBNB</TITLE>
     </HEAD>
     <BODY>
-        <H1>{{ hd }}</H1>
+	    <H1>States</H1>
         <UL>
-	    {% for st in sts %}
-            <LI>{{ st["id"] }}: <B>{{ st["name"] }}</B>
+	    {% for state in statesList | sort(attribute="name")%}
+            <LI>{{ state.id }}: <B>{{ state.name }}</B>
 	        <UL>
-		        {% for city in s.cities|sort(attribute='name') %}
+		        {% for city in state.cities | sort(attribute='name') %}
 		        <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
 	                {% endfor %}
 		</UL>
