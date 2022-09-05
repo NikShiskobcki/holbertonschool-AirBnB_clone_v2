@@ -7,9 +7,9 @@
         <H1>{{ hd }}</H1>
         <UL>
 	    {% for st in sts %}
-            <LI>{{ st[0].id }}: <B>{{ st[0].name }}</B>
+            <LI>{{ st["id"] }}: <B>{{ st["name"] }}</B>
 	        <UL>
-		        {% for city in st[1] %}
+		        {% for city in s.cities|sort(attribute='name') %}
 		        <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
 	                {% endfor %}
 		</UL>
