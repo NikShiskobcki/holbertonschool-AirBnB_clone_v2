@@ -14,13 +14,6 @@ def teadown(self):
     storage.close()
 
 
-@app.route("/states_list", strict_slashes=False)
-def stateslist():
-    """displays html"""
-    statesList = storage.all(State).values()
-    statesList = sorted(statesList, key=lambda k: k.name)
-    return render_template("7-states_list.html", statesList=statesList)
-
 @app.route("/cities_by_states", strict_slashes=False)
 def citiesState():
     """displays html"""
