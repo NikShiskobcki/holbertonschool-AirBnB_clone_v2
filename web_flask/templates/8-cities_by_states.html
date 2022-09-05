@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<HTML lang="en">
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+        <H1>{{ hd }}</H1>
+        <UL>
+	    {% for st in sts %}
+            <LI>{{ st[0].id }}: <B>{{ st[0].name }}</B>
+	        <UL>
+		        {% for city in st[1] %}
+		        <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+	                {% endfor %}
+		</UL>
+            </LI>
+	    {% endfor %}
+	</UL>
+    </BODY>
+</HTML>
