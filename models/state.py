@@ -11,16 +11,17 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship('City', backref="state", cascade="all, \
-                          delete-orphan")
+    if getenv("HBNB_TYPE_STORAGE") == 'db':
+        cities = relationship('City', backref="state", cascade="all, \
+                              delete-orphan")
 
     if getenv("HBNB_TYPE_STORAGE") != 'db':
         @property
         def cities(self):
             """list cities"""
             lcities = []
-            allcities = models.storage.all(City)
+            allcities = models.storage.all(models.City)
             for city in allcities:
-                if state_id == self.id:
+                if models.City.state_id == self.id:
                     lcities.append(city)
             return lcities
